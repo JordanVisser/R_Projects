@@ -1,0 +1,54 @@
+
+### Data Set
+
+The data set for this assignment is called **`msleep`**. See the [msleep documentation](https://ggplot2.tidyverse.org/reference/msleep.html) for more info.
+
+```{r}
+
+rm(list = ls())
+
+library(tidyverse) 
+
+
+```
+
+```{r}
+
+Q1 <- cor.test(msleep$sleep_total, msleep$bodywt)
+
+Q1
+
+```
+
+```{r}
+
+sleep_copy = data_frame(msleep)
+Q2 <- sleep_copy |>
+  select("sleep_total","sleep_rem","brainwt","bodywt") |>
+  na.omit()|>
+  cor() |>
+  round(2)
+
+Q2
+
+```
+
+```{r}
+
+Q3 <- lm(bodywt ~ vore, data = msleep)$coefficients
+Q3 <- round(Q3, 2)
+Q3
+
+```
+
+```{r}
+
+filtered_data <- filter(msleep, vore != "omni" & vore != "insecti")
+
+filtered_data <- mutate(filtered_data, vorebin = ifelse(vore == 'carni', 0, 1))
+
+Q4 <- glm(vorebin ~ sleep_total, data = filtered_data, family = binomial)
+
+summary(Q4)
+
+```
