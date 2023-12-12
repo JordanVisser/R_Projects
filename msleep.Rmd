@@ -1,0 +1,100 @@
+
+### Data Set
+
+The data set for this assignment is called **`msleep`**. See the [msleep documentation](https://ggplot2.tidyverse.org/reference/msleep.html) for more info.
+
+```{r}
+
+rm(list = ls())
+
+library(tidyverse) 
+
+```
+
+```{r}
+
+msleep
+
+```
+
+```{r}
+
+Q0 <- msleep %>%
+  select(name, vore, conservation, sleep_total) %>%
+  filter(vore=="carni", !is.na(conservation)) %>% 
+  group_by(conservation) %>% 
+  summarize(sleep_time_med = round(median(sleep_total, na.rm=TRUE),2)) %>%
+  as.data.frame()
+
+Q0
+
+```
+
+```{r}
+
+Q1 <- msleep |>
+  filter(vore == 'carni' & conservation == 'lc') |>
+  summarise(var = var(sleep_total)) |>
+  mutate(var = round(var, 2)) |>
+  as.data.frame()
+
+Q1
+
+```
+
+```{r}
+
+Q2 <- msleep |>
+        mutate( ratio = sleep_total / sleep_rem) |>
+        filter(order == 'Rodentia', rna.rm = TRUE) |>
+        arrange(desc(ratio)) |>
+        head(1) |>
+        select(name) |>
+        as.data.frame()
+        
+Q2
+
+```
+
+```{r}
+
+Q3 <- msleep |>
+        mutate(ratio = bodywt/brainwt) |>
+        filter(ratio > 100 & order == 'Primates') |>
+        nrow() |>
+        as.data.frame()
+
+Q3
+
+```
+
+```{r}
+
+Q4 <- msleep |>
+        filter(!is.na(sleep_total)) |>
+        group_by(conservation) |>
+        summarise(
+          mean_sleep = mean(sleep_total, na.rm = TRUE),
+          var_sleep = var(sleep_total, na.rm = TRUE)
+        ) |>
+        filter(!is.na(conservation)) |>
+        mutate(
+        mean_sleep = round(mean_sleep, 2), 
+        var_sleep = round(var_sleep, 2)) |>
+        as.data.frame()
+
+Q4
+
+```
+
+```{r}
+
+Q5 <- msleep |>
+        filter(vore == 'herbi' & conservation == 'domesticated' & sleep_total > 12) |>
+        select(name) |>
+        as.data.frame()
+
+Q5
+
+```
+
